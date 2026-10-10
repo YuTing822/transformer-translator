@@ -1,0 +1,28 @@
+# 虚拟环境
+.venv/
+venv/
+
+# IDE和缓存
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+
+# 大模型权重和数据集
+model/
+model_weight/
+weights/
+data/
+checkpoints/
+*.pt
+*.pth
+*.bin
+
+# 运行日志
+run/
+logs/
+*.log
+
+# 敏感信息
+.env
+config.ini

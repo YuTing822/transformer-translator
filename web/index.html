@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>译境 · Transformer 英译中</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17233b;
+      --muted: #768198;
+      --line: #e6eaf1;
+      --blue: #526cf5;
+      --blue-dark: #4058db;
+      --mint: #dff7ee;
+      --canvas: #f5f7fb;
+      font-family: Inter, "SF Pro Display", "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 8% 4%, rgba(120, 151, 255, .13), transparent 32rem),
+        radial-gradient(ellipse at 92% 35%, rgba(103, 215, 177, .13), transparent 28rem),
+        var(--canvas);
+    }
+
+    button, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+
+    header {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(222, 228, 238, .8);
+    }
+
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 750; letter-spacing: -.04em; }
+    .brand-mark {
+      width: 34px; height: 34px; display: grid; place-items: center;
+      border-radius: 11px; color: #fff; background: linear-gradient(145deg, #7388ff, #4e61e7);
+      box-shadow: 0 6px 15px rgba(82, 108, 245, .23); font-size: 16px;
+    }
+    .brand-name { font-size: 17px; }
+    .brand-name span { color: var(--muted); font-weight: 550; letter-spacing: -.02em; }
+    .header-note { color: var(--muted); font-size: 13px; }
+
+    main { padding: 64px 0 50px; }
+    .intro { max-width: 670px; margin: 0 auto 34px; text-align: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
+      border: 1px solid #e4e8f4; border-radius: 99px; color: #5869c9; background: rgba(255,255,255,.72);
+      font-size: 12px; font-weight: 650; letter-spacing: .04em;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: #54c79e; box-shadow: 0 0 0 3px #e4f8ef; }
+    h1 { margin: 18px 0 12px; font-size: clamp(34px, 5vw, 53px); line-height: 1.12; letter-spacing: -.055em; }
+    .intro p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.8; }
+
+    .translator {
+      overflow: hidden; border: 1px solid rgba(224, 229, 239, .95); border-radius: 22px;
+      background: rgba(255, 255, 255, .91); box-shadow: 0 22px 70px rgba(39, 56, 93, .09);
+    }
+    .direction {
+      height: 62px; display: flex; justify-content: center; align-items: center; gap: 18px;
+      border-bottom: 1px solid var(--line); color: #59657c; font-size: 13px; font-weight: 650;
+    }
+    .language { display: flex; align-items: center; gap: 8px; }
+    .language-icon { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 8px; background: #f0f3ff; color: #586df0; font-size: 12px; }
+    .language-icon.cn { background: #e9f8f2; color: #32a67d; }
+    .direction-arrow { color: #9aa4b6; font-size: 17px; }
+
+    .panels { display: grid; grid-template-columns: 1fr 1fr; }
+    .panel { min-height: 300px; padding: 23px 26px 18px; }
+    .panel + .panel { border-left: 1px solid var(--line); background: linear-gradient(145deg, #fff 10%, #fbfffd); }
+    .panel-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .panel-label { color: #8791a4; font-size: 11px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .quiet-button {
+      padding: 5px 8px; border: 0; border-radius: 7px; color: #8a94a7; background: transparent; font-size: 12px;
+    }
+    .quiet-button:hover { color: var(--blue); background: #f3f5ff; }
+    textarea {
+      width: 100%; height: 174px; resize: vertical; min-height: 120px; padding: 0;
+      border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 18px; line-height: 1.75;
+    }
+    textarea::placeholder { color: #b5bdca; }
+    .translation-output {
+      min-height: 174px; color: #33415c; font-size: 20px; line-height: 1.8; white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .translation-output.empty { color: #b5bdca; font-size: 16px; }
+    .panel-bottom { display: flex; align-items: center; justify-content: space-between; color: #a0a9b8; font-size: 12px; }
+    .shortcut { display: flex; align-items: center; gap: 6px; }
+    kbd {
+      padding: 3px 6px; border: 1px solid #e8ebf1; border-radius: 5px; color: #818b9e;
+      background: #fafbfc; font: inherit; font-size: 10px;
+    }
+    .output-tools { display: flex; gap: 7px; }
+    .output-tools button {
+      width: 29px; height: 29px; display: grid; place-items: center; padding: 0;
+      border: 1px solid #edf0f5; border-radius: 8px; color: #778297; background: #fff;
+    }
+    .output-tools button:hover { border-color: #dce2ff; color: var(--blue); }
+    .output-tools button svg { width: 15px; height: 15px; }
+
+    .action-row {
+      display: flex; align-items: center; justify-content: space-between; padding: 16px 22px;
+      border-top: 1px solid var(--line); background: #fcfdff;
+    }
+    .model-note { display: flex; align-items: center; gap: 9px; color: #8993a5; font-size: 12px; }
+    .model-icon {
+      width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid #e8ebf5;
+      border-radius: 9px; color: #6878dc; background: #f5f6ff;
+    }
+    .model-icon svg { width: 16px; height: 16px; }
+    .model-note strong { display: block; margin-bottom: 2px; color: #566177; font-size: 12px; font-weight: 650; }
+    .translate-button {
+      display: inline-flex; min-width: 146px; align-items: center; justify-content: center; gap: 9px;
+      padding: 12px 18px; border: 0; border-radius: 11px; color: #fff;
+      background: linear-gradient(135deg, #687df8, #4f64e8); box-shadow: 0 7px 16px rgba(82, 108, 245, .22);
+      font-size: 14px; font-weight: 700; transition: transform .15s, box-shadow .15s, opacity .15s;
+    }
+    .translate-button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(82, 108, 245, .28); }
+    .translate-button:disabled { cursor: wait; opacity: .72; }
+    .translate-button svg { width: 16px; height: 16px; }
+    .spinner { width: 15px; height: 15px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .examples { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+    .examples-label { color: #939cad; font-size: 12px; }
+    .example {
+      padding: 7px 11px; border: 1px solid #e5e9f1; border-radius: 99px; color: #657087;
+      background: rgba(255,255,255,.72); font-size: 12px; transition: border-color .15s, color .15s;
+    }
+    .example:hover { border-color: #cbd3ff; color: #5267e8; }
+    .error { min-height: 20px; margin: 12px 4px 0; color: #c34450; text-align: center; font-size: 13px; }
+    footer { padding: 17px 0 28px; color: #9aa3b2; text-align: center; font-size: 11px; }
+    footer span { padding: 0 7px; color: #c1c7d1; }
+
+    @media (max-width: 680px) {
+      .shell { width: min(100% - 28px, 520px); }
+      header { height: 68px; }
+      .header-note { font-size: 11px; }
+      main { padding: 45px 0 35px; }
+      .intro { margin-bottom: 24px; }
+      .intro p { font-size: 14px; }
+      .translator { border-radius: 17px; }
+      .panels { grid-template-columns: 1fr; }
+      .panel { min-height: 245px; padding: 19px 20px 16px; }
+      .panel + .panel { min-height: 210px; border-top: 1px solid var(--line); border-left: 0; }
+      textarea, .translation-output { height: 128px; min-height: 128px; font-size: 16px; }
+      .translation-output { font-size: 18px; }
+      .action-row { gap: 12px; padding: 14px; }
+      .model-note { font-size: 11px; }
+      .translate-button { min-width: 128px; padding: 11px 13px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">译</div>
+        <div class="brand-name">译境 <span>/ Transformer</span></div>
+      </div>
+      <div class="header-note">一个英译中模型演示</div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> 本地模型 · 即输即译</div>
+        <h1>让语言，自然抵达。</h1>
+        <p>输入一段英文，看看 Transformer 如何理解语境，<br>并尝试将它转化为中文。</p>
+      </section>
+
+      <section class="translator" aria-label="英译中翻译器">
+        <div class="direction">
+          <span class="language"><span class="language-icon">EN</span>英语</span>
+          <span class="direction-arrow" aria-hidden="true">→</span>
+          <span class="language"><span class="language-icon cn">中</span>简体中文</span>
+        </div>
+        <div class="panels">
+          <div class="panel">
+            <div class="panel-top">
+              <span class="panel-label">输入英文</span>
+              <button class="quiet-button" id="clearButton" type="button">清空</button>
+            </div>
+            <textarea id="sourceText" maxlength="1000" aria-label="请输入英文" placeholder="在这里输入要翻译的英文……"></textarea>
+            <div class="panel-bottom">
+              <span id="charCount">0 / 1000</span>
+              <span class="shortcut"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 翻译</span>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-top">
+              <span class="panel-label">翻译结果</span>
+              <div class="output-tools">
+                <button id="copyButton" type="button" aria-label="复制译文" title="复制译文">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div id="translationText" class="translation-output empty" aria-live="polite">译文会显示在这里</div>
+            <div class="panel-bottom">
+              <span id="resultNote">由本地 Transformer 模型生成</span>
+              <span class="output-tools">
+                <button id="speakButton" type="button" aria-label="朗读译文" title="朗读译文">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M19 5a10 10 0 0 1 0 14"></path></svg>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="action-row">
+          <div class="model-note">
+            <span class="model-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path><path d="m4.5 7.8 7.5 4.4 7.5-4.4M12 12.2V21"></path></svg>
+            </span>
+            <span><strong>Transformer · Beam Search</strong><span id="deviceStatus">正在连接本地模型…</span></span>
+          </div>
+          <button class="translate-button" id="translateButton" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            <span>开始翻译</span>
+          </button>
+        </div>
+      </section>
+
+      <div id="errorMessage" class="error" role="alert"></div>
+      <div class="examples" aria-label="试试这些句子">
+        <span class="examples-label">试试：</span>
+        <button class="example" type="button" data-sentence="The future belongs to those who believe in the beauty of their dreams.">梦想与未来</button>
+        <button class="example" type="button" data-sentence="Technology is best when it brings people together.">科技与连接</button>
+        <button class="example" type="button" data-sentence="The weather is beautiful today.">天气与风景</button>
+      </div>
+    </main>
+
+    <footer>基于 PyTorch Transformer 构建 <span>·</span> 模型生成结果仅供参考</footer>
+  </div>
+
+  <script>
+    const sourceText = document.getElementById("sourceText");
+    const translationText = document.getElementById("translationText");
+    const translateButton = document.getElementById("translateButton");
+    const errorMessage = document.getElementById("errorMessage");
+    const charCount = document.getElementById("charCount");
+    const resultNote = document.getElementById("resultNote");
+    const deviceStatus = document.getElementById("deviceStatus");
+
+    function showTranslation(text) {
+      translationText.textContent = text;
+      translationText.classList.toggle("empty", !text);
+      if (!text) translationText.textContent = "译文会显示在这里";
+    }
+
+    async function translate() {
+      const sentence = sourceText.value.trim();
+      errorMessage.textContent = "";
+      errorMessage.style.color = "";
+      if (!sentence) {
+        errorMessage.textContent = "先输入一句英文，再开始翻译。";
+        sourceText.focus();
+        return;
+      }
+
+      translateButton.disabled = true;
+      translateButton.innerHTML = '<span class="spinner" aria-hidden="true"></span><span>正在翻译…</span>';
+      resultNote.textContent = "模型正在生成译文";
+      const startedAt = performance.now();
+
+      try {
+        const response = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sentence })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "翻译请求失败。");
+        showTranslation(result.translation);
+        resultNote.textContent = `生成完成 · ${((performance.now() - startedAt) / 1000).toFixed(1)} 秒`;
+      } catch (error) {
+        errorMessage.textContent = error.message || "无法连接翻译服务，请确认本地服务正在运行。";
+        resultNote.textContent = "翻译未完成";
+      } finally {
+        translateButton.disabled = false;
+        translateButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg><span>开始翻译</span>';
+      }
+    }
+
+    sourceText.addEventListener("input", () => {
+      charCount.textContent = `${sourceText.value.length} / 1000`;
+      errorMessage.textContent = "";
+      errorMessage.style.color = "";
+    });
+    translateButton.addEventListener("click", translate);
+    sourceText.addEventListener("keydown", event => {
+      if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) translate();
+    });
+    document.getElementById("clearButton").addEventListener("click", () => {
+      sourceText.value = "";
+      charCount.textContent = "0 / 1000";
+      errorMessage.textContent = "";
+      errorMessage.style.color = "";
+      resultNote.textContent = "由本地 Transformer 模型生成";
+      showTranslation("");
+      sourceText.focus();
+    });
+    document.querySelectorAll(".example").forEach(button => {
+      button.addEventListener("click", () => {
+        sourceText.value = button.dataset.sentence;
+        sourceText.dispatchEvent(new Event("input"));
+        sourceText.focus();
+        translate();
+      });
+    });
+    document.getElementById("copyButton").addEventListener("click", async () => {
+      const text = translationText.classList.contains("empty") ? "" : translationText.textContent;
+      if (!text) {
+        errorMessage.textContent = "目前没有可复制的译文。";
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        errorMessage.textContent = "译文已复制。";
+        errorMessage.style.color = "#278765";
+      } catch {
+        errorMessage.textContent = "复制失败，请检查浏览器剪贴板权限。";
+        errorMessage.style.color = "";
+      }
+    });
+    document.getElementById("speakButton").addEventListener("click", () => {
+      const text = translationText.classList.contains("empty") ? "" : translationText.textContent;
+      if (!text || !("speechSynthesis" in window)) {
+        errorMessage.textContent = text ? "当前浏览器不支持语音朗读。" : "目前没有可朗读的译文。";
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "zh-CN";
+      window.speechSynthesis.speak(utterance);
+    });
+
+    fetch("/api/health")
+      .then(response => response.json())
+      .then(status => {
+        deviceStatus.textContent = status.ready ? `模型已就绪 · ${status.device}` : "模型尚未就绪";
+      })
+      .catch(() => {
+        deviceStatus.textContent = "请启动本地翻译服务";
+      });
+  </script>
+</body>
+</html>
